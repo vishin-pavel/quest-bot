@@ -7,8 +7,13 @@ $config = [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'components' => [
+        'bot' => [
+            'class' => 'SonkoDmitry\Yii\TelegramBot\Component',
+            'apiToken' => '333033824:AAEIZZwkaFssI-e-JRvtTcR6iICTW3u-yAI',
+        ],
         'request' => [
             'cookieValidationKey' => 'QnwCSoncop5kP5EhYNOR',
+            'enableCsrfValidation' => false,
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
@@ -37,14 +42,13 @@ $config = [
             ],
         ],
         'db' => require(__DIR__ . '/db.php'),
-        /*
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'POST bot/333033824:AAEIZZwkaFssI-e-JRvtTcR6iICTW3u-yAI/' => 'bot/index'
             ],
         ],
-        */
     ],
     'params' => $params,
 ];
