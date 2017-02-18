@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="f29b6089-9a09-4eaa-af53-d29a515975ce" name="quest-bot" url="http://telebot.backend.pro">
+        <fileTransfer host="telebot.backend.pro" port="22" privateKey="C:\Users\itvis\.ssh\main_priv_ssh2_rsa.ppk" rootFolder="/root/projects/telebot" accessType="SFTP" keyPair="true">
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
