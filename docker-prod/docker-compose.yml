@@ -27,7 +27,7 @@ quest-bot-php-fpm:
   dockerfile: php-fpm/Dockerfile
   container_name: quest-bot-php-fpm
   volumes:
-    - ..:/var/www/quest-bot
+    - ../src:/var/www/quest-bot
     - ./php-fpm/php-ini-overrides.ini:/etc/php/7.1/fpm/conf.d/99-overrides.ini
   links:
     - quest-bot-memcached
