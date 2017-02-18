@@ -1,4 +1,3 @@
-assets/*
 vendor
 !assets/.gitignore
 protected/runtime/*
