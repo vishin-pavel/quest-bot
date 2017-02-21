@@ -2,8 +2,7 @@
 namespace app\controllers;
 
 
-use TelegramBot\Api\Client;
-use TelegramBot\Api\Exception;
+use yii\base\Exception;
 use yii\web\Controller;
 
 class BotController extends Controller
@@ -12,14 +11,29 @@ class BotController extends Controller
     public function actionIndex()
     {
         try {
-            $bot = new Client(\Yii::$app->bot->apiToken);
-            $bot->command('start', function ($message) use ($bot) {
-                $bot->sendMessage($message->getChat()->getId(), "Здаровки, иди на хуй");
-            });
-            $bot->run();
-
+            $this->registerDefaultCommands();
+            $update = \Yii::$app->bot->commandsHandler(true);
+            if( !$update->isEmpty() &&
+                \Yii::$app->bot->getCommandBus()->parseCommand($update->getMessage()) &&
+                in_array(\Yii::$app->bot->getCommandBus()->getCommands(),
+                \Yii::$app->bot->getCommandBus()->parseCommand($update->getMessage())[0])){
+                \Yii::$app->bot->getCommandBus()->execute('answer', [], $update->getMessage());
+            }
         } catch (Exception $e) {
             $e->getMessage();
         }
+    }
+
+    private function registerDefaultCommands(){
+        \Yii::$app->bot->addCommands([
+            \app\components\Telegram\Bot\commands\AnswerCommand::class,
+            \app\components\Telegram\Bot\commands\CurrentGameCommand::class,
+            \app\components\Telegram\Bot\commands\CurrentTaskCommand::class,
+            \app\components\Telegram\Bot\commands\HelpCommand::class,
+            \app\components\Telegram\Bot\commands\MyGamesCommand::class,
+            \app\components\Telegram\Bot\commands\StartCommand::class,
+            \app\components\Telegram\Bot\commands\StartGameCommand::class,
+            \app\components\Telegram\Bot\commands\StartTaskCommand::class,
+        ]);
     }
 }

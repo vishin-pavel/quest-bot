@@ -3,12 +3,11 @@
 namespace app\components\Telegram\Bot;
 
 
-use Longman\TelegramBot\Telegram;
 use Yii;
 use yii\base\Configurable;
 use yii\base\Exception;
 
-class Api extends Telegram implements Configurable
+class Api extends \Telegram\Bot\Api implements Configurable
 {
     /**
      * Bot token
@@ -26,8 +25,6 @@ class Api extends Telegram implements Configurable
         if (empty($this->apiToken)) {
             throw new Exception('Bot token cannot be empty');
         }
-        parent::__construct($this->apiToken, $this->botName);
-        $this->addCommandsPath(Yii::getAlias('@app/components/Telegram/Bot/commands'));
-        $this->addCommandsPath(Yii::getAlias('@app/components/Telegram/Bot/commands/disableDefaultCmd'));
+        parent::__construct($this->apiToken);
     }
 }

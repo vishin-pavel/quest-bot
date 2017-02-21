@@ -8,7 +8,7 @@ $config = [
     'bootstrap' => ['log'],
     'components' => [
         'bot' => [
-            'class' => 'SonkoDmitry\Yii\TelegramBot\Component',
+            'class' => '\app\components\Telegram\Bot\Api',
             'apiToken' => '333033824:AAEIZZwkaFssI-e-JRvtTcR6iICTW3u-yAI',
         ],
         'request' => [
@@ -46,7 +46,7 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                'POST bot/333033824:AAEIZZwkaFssI-e-JRvtTcR6iICTW3u-yAI/' => 'bot/index'
+                'POST,GET bot/333033824:AAEIZZwkaFssI-e-JRvtTcR6iICTW3u-yAI/' => 'bot/index'
             ],
         ],
     ],
