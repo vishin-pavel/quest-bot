@@ -10,6 +10,8 @@ quest-bot-mysql:
     - MYSQL_DATABASE=quest-bot
     - MYSQL_USER=123
     - MYSQL_PASSWORD=123
+  ports:
+   - "8036:3306"
 
 quest-bot-webserver:
   image: phpdockerio/nginx:latest

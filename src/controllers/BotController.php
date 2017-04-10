@@ -2,7 +2,7 @@
 namespace app\controllers;
 
 
-use yii\base\Exception;
+use Telegram\Bot\Objects\Update;
 use yii\web\Controller;
 
 class BotController extends Controller
@@ -12,15 +12,24 @@ class BotController extends Controller
     {
         try {
             $this->registerDefaultCommands();
-            $update = \Yii::$app->bot->commandsHandler(true);
-            if( !$update->isEmpty() &&
-                \Yii::$app->bot->getCommandBus()->parseCommand($update->getMessage()) &&
-                in_array(\Yii::$app->bot->getCommandBus()->getCommands(),
-                \Yii::$app->bot->getCommandBus()->parseCommand($update->getMessage())[0])){
-                \Yii::$app->bot->getCommandBus()->execute('answer', [], $update->getMessage());
+            /** @var Update $update */
+            $update = \Yii::$app->bot->getWebhookUpdate();
+            if(!$update->getMessage()->getLocation()){
+                $update = \Yii::$app->bot->commandsHandler(true);
             }
-        } catch (Exception $e) {
-            $e->getMessage();
+            if( !$update->getMessage()->getText() ||
+                !isset(\Yii::$app->bot->getCommandBus()->parseCommand($update->getMessage()->getText())[1]) ||
+                (isset(\Yii::$app->bot->getCommandBus()->parseCommand($update->getMessage()->getText())[1]) &&
+                 in_array(\Yii::$app->bot->getCommandBus()->parseCommand($update->getMessage()->getText())[1], \Yii::$app->bot->getCommandBus()->getCommands()))
+            ){
+                $commandBus = \Yii::$app->bot->getCommandBus();
+                $arguments = $update->getMessage()->getText()?$update->getMessage()->getText():'';
+                $commandBus->execute('answer', $arguments, $update);
+
+            }
+        } catch (\Exception $e) {
+            $update = \Yii::$app->bot->getWebhookUpdates();
+            \Yii::$app->bot->sendMessage(['text'=>$e->getMessage(), 'chat_id'=>$update->getMessage()->getChat()->getId()]);
         }
     }
 
@@ -30,10 +39,8 @@ class BotController extends Controller
             \app\components\Telegram\Bot\commands\CurrentGameCommand::class,
             \app\components\Telegram\Bot\commands\CurrentTaskCommand::class,
             \app\components\Telegram\Bot\commands\HelpCommand::class,
-            \app\components\Telegram\Bot\commands\MyGamesCommand::class,
             \app\components\Telegram\Bot\commands\StartCommand::class,
             \app\components\Telegram\Bot\commands\StartGameCommand::class,
-            \app\components\Telegram\Bot\commands\StartTaskCommand::class,
         ]);
     }
 }

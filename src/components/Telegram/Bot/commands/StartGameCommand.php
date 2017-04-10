@@ -3,8 +3,14 @@
 namespace app\components\Telegram\Bot\commands;
 
 
-use Telegram\Bot\Actions;
+use app\models\EntranceToken;
+use app\models\Game;
+use app\models\Group;
+use app\models\Player;
+use app\models\Task;
+use app\models\TelegramUser;
 use Telegram\Bot\Commands\Command;
+use Telegram\Bot\Keyboard\Keyboard;
 
 class StartGameCommand extends Command
 {
@@ -23,7 +29,59 @@ class StartGameCommand extends Command
      */
     public function handle($arguments)
     {
-        //ToDo: Запустить новую игру
-        $this->replyWithMessage(['text' => 'На данный момент нет доступных игр']);
+        if(!$telegramUser = TelegramUser::findOne($this->getUpdate()->getChat()->getId())){
+            $telegramUser = new TelegramUser();
+            $telegramUser->id = $this->getUpdate()->getChat()->getId();
+            $telegramUser->save();
+        }
+        if(!$token = EntranceToken::findOne($arguments)){
+            $this->replyWithMessage(['text' => 'Не верный пароль']);
+            return 0;
+        }
+        if($token->counter < 1){
+            $this->replyWithMessage(['text' => 'Превышен лимит игроков']);
+            return 0;
+        }
+        $game = $token->game;
+        if(!$group = $token->group){
+            $group = new Group();
+            $token->link('group', $group);
+        }
+
+        if(!$player = Player::findOne(['telegram_user_id' => $telegramUser->id, 'game_id' => $game->id])){
+            $player = new Player();
+            $player->telegram_user_id = $telegramUser->id;
+            $player->game_id = $game->id;
+            $player->save();
+            $token->updateCounters(['counter'=>-1]);
+        }
+        /** @var Task $firstTask */
+        $firstTask = $game->getTasks()->where(['prev_task' => null])->one();
+        $player->current_task = $firstTask->id;
+        $player->save();
+
+        $btn = Keyboard::button([
+            'text' => 'Отправить моё местоположение',
+            'request_location' => true
+        ]);
+        $keyboard = Keyboard::make([
+            'keyboard' => [[$btn]],
+            'resize_keyboard' => true,
+            'one_time_keyboard' => true
+        ]);
+        $this->replyWithMessage([
+            'text' => 'Вы начали игру: '.$game->name,
+//            'reply_markup' => $keyboard
+        ]);
+        $this->replyWithMessage(['text' => $game->description]);
+        $this->replyWithMessage(['text' => 'Новое задание:']);
+        $this->replyWithMessage(['text' => $firstTask->start_text]);
+        foreach ($firstTask->images as $image){
+            $this->replyWithPhoto([
+                'chat_id' => $this->getUpdate()->getChat()->getId(),
+                'photo' => 'http://telebot.backend.pro'.$image->path,
+                'caption' => ' '
+            ]);
+        }
     }
 }

@@ -3,6 +3,8 @@
 namespace app\components\Telegram\Bot\commands;
 
 
+use app\models\TelegramUser;
+use app\models\User;
 use Telegram\Bot\Actions;
 use Telegram\Bot\Commands\Command;
 
@@ -23,7 +25,8 @@ class CurrentGameCommand extends Command
      */
     public function handle($arguments)
     {
-        //Todo Получить список текущих игр
+        $user = TelegramUser::findOne($this->getUpdate()->getChat()->getId());
+        $user->games;
         $this->replyWithMessage(['text' => 'У вас нет текущих игр']);
     }
 }

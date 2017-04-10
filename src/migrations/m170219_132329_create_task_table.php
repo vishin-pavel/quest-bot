@@ -12,6 +12,11 @@ class m170219_132329_create_task_table extends Migration
      */
     public function up()
     {
+        $tableOptions = null;
+        if ($this->db->driverName === 'mysql') {
+            // http://stackoverflow.com/questions/766809/whats-the-difference-between-utf8-general-ci-and-utf8-unicode-ci
+            $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
+        }
         $this->createTable('task', [
             'id' => $this->primaryKey(),
             'description' => $this->text(),
@@ -21,9 +26,9 @@ class m170219_132329_create_task_table extends Migration
             'next_task' => $this->integer(11),
             'prev_task' => $this->integer(11),
             'game_id' => $this->integer(11),
-            'point' => 'point NOT NULL',
-            'SPATIAL KEY `point` (`point`)'
-        ]);
+//            'point' => 'point',
+//            'SPATIAL KEY `point` (`point`)'
+        ], $tableOptions );
         $this->addForeignKey('fk_task_game', 'task', 'game_id', 'game', 'id');
     }
 

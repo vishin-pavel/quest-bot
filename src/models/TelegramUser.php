@@ -63,7 +63,7 @@ class TelegramUser extends \yii\db\ActiveRecord
      */
     public function getGames()
     {
-        return $this->hasMany(Game::className(), ['id' => 'game_id'])->viaTable('player', ['telegram_user_id' => 'id']);
+        return $this->hasMany(Game::className(), ['id' => 'game_id'])->via('players');
     }
 
     /**

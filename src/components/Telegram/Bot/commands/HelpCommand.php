@@ -32,8 +32,6 @@ class HelpCommand extends Command
         }
         $this->replyWithMessage(['text' => $response]);
         $this->replyWithChatAction(['action' => Actions::TYPING]);
-        $this->replyWithMessage(['text' => 'И еще:']);
-        $this->replyWithChatAction(['action' => Actions::TYPING]);
-        $this->replyWithMessage(['text' => 'Сходите пожалуста на хуй!']);
+        $this->replyWithMessage(['text' => '!Простой ответ(не команда) в данный чат считается ответом на текущее задание']);
     }
 }

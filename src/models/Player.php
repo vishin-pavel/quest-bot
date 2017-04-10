@@ -14,6 +14,7 @@ use Yii;
  *
  * @property Game $game
  * @property TelegramUser $telegramUser
+ * @property Task $currentTask
  */
 class Player extends \yii\db\ActiveRecord
 {
@@ -74,5 +75,10 @@ class Player extends \yii\db\ActiveRecord
     public static function find()
     {
         return new \app\models\queries\PlayerQuery(get_called_class());
+    }
+
+    public function getCurrentTask()
+    {
+        return $this->hasOne(Task::className(), ['id' => 'current_task']);
     }
 }

@@ -3,6 +3,9 @@
 namespace app\models;
 
 use Yii;
+use yii\db\ActiveQuery;
+use yii\db\mysql\QueryBuilder;
+use yii\db\Query;
 
 /**
  * This is the model class for table "task".
@@ -15,12 +18,17 @@ use Yii;
  * @property integer $next_task
  * @property integer $prev_task
  * @property integer $game_id
- * @property string $point
+ * @property string $longitude
+ * @property string $latitude
  *
  * @property Game $game
+ * @property File[]  $images
  */
 class Task extends \yii\db\ActiveRecord
 {
+//    var $longitude;
+//    var $latitude;
+
     /**
      * @inheritdoc
      */
@@ -35,11 +43,17 @@ class Task extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['description', 'start_text', 'final_text', 'point'], 'string'],
+            [['description', 'start_text', 'final_text',], 'string'],
             [['next_task', 'prev_task', 'game_id'], 'integer'],
-            [['point'], 'required'],
+//            [['longitude', 'latitude'], 'required'],
             [['pass_phrase'], 'string', 'max' => 255],
-            [['game_id'], 'exist', 'skipOnError' => true, 'targetClass' => Game::className(), 'targetAttribute' => ['game_id' => 'id']],
+            [
+                ['game_id'],
+                'exist',
+                'skipOnError'     => true,
+                'targetClass'     => Game::className(),
+                'targetAttribute' => ['game_id' => 'id']
+            ],
         ];
     }
 
@@ -49,15 +63,16 @@ class Task extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
+            'id'          => 'ID',
             'description' => 'Description',
-            'start_text' => 'Start Text',
-            'final_text' => 'Final Text',
+            'start_text'  => 'Start Text',
+            'final_text'  => 'Final Text',
             'pass_phrase' => 'Pass Phrase',
-            'next_task' => 'Next Task',
-            'prev_task' => 'Prev Task',
-            'game_id' => 'Game ID',
-            'point' => 'Point',
+            'next_task'   => 'Next Task',
+            'prev_task'   => 'Prev Task',
+            'game_id'     => 'Game ID',
+//            'longitude' => 'Долгота',
+//            'latitude' => 'Широта',
         ];
     }
 
@@ -76,5 +91,15 @@ class Task extends \yii\db\ActiveRecord
     public static function find()
     {
         return new \app\models\queries\TaskQuery(get_called_class());
+    }
+
+    public function getTaskImages()
+    {
+        return $this->hasMany(TaskImage::className(), ['task_id' => 'id']);
+    }
+
+    public function getImages()
+    {
+        return $this->hasMany(File::className(), ['id'=>'image_id'])->via('taskImages');
     }
 }
