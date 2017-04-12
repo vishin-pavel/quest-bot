@@ -10,6 +10,7 @@ use Yii;
  * @property integer $id
  * @property string $name
  * @property string $description
+ * @property mixed $first_task
  *
  * @property Player[] $players
  * @property TelegramUser[] $telegramUsers
@@ -32,6 +33,7 @@ class Game extends \yii\db\ActiveRecord
     {
         return [
             [['description'], 'string'],
+            [['first_task'], 'integer'],
             [['name'], 'string', 'max' => 255],
         ];
     }

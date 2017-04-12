@@ -24,6 +24,7 @@ class m170409_103424_create_user_group_table extends Migration
             'PRIMARY KEY (`telegram_user_id`, `group_id`, `game_id`)'
         ],$tableOptions);
         $this->addForeignKey('fk_user_group_group', 'user_group', 'group_id', 'group', 'id');
+        $this->addForeignKey('fk_user_group_player', 'user_group', ['game_id','telegram_user_id'], 'player', ['game_id','telegram_user_id']);
     }
 
     /**
@@ -31,7 +32,8 @@ class m170409_103424_create_user_group_table extends Migration
      */
     public function down()
     {
-        $this->dropTable('user_group');
         $this->dropForeignKey('fk_user_group_group', 'user_group');
+        $this->dropForeignKey('fk_user_group_player', 'user_group');
+        $this->dropTable('user_group');
     }
 }

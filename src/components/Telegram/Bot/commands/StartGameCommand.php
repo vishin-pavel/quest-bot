@@ -42,9 +42,13 @@ class StartGameCommand extends Command
             $this->replyWithMessage(['text' => 'Превышен лимит игроков']);
             return 0;
         }
-        $game = $token->game;
+        if(!$game = $token->game){
+            $this->replyWithMessage(['text' => 'Токен не привязан ни к одной игре']);
+            return 0;
+        }
         if(!$group = $token->group){
-            $group = new Group();
+            $group = new Group();   
+            $group->current_task = $game->first_task;
             $token->link('group', $group);
         }
 
@@ -53,6 +57,7 @@ class StartGameCommand extends Command
             $player->telegram_user_id = $telegramUser->id;
             $player->game_id = $game->id;
             $player->save();
+            $group->link('players', $player);
             $token->updateCounters(['counter'=>-1]);
         }
         /** @var Task $firstTask */
@@ -74,7 +79,6 @@ class StartGameCommand extends Command
 //            'reply_markup' => $keyboard
         ]);
         $this->replyWithMessage(['text' => $game->description]);
-        $this->replyWithMessage(['text' => 'Новое задание:']);
         $this->replyWithMessage(['text' => $firstTask->start_text]);
         foreach ($firstTask->images as $image){
             $this->replyWithPhoto([

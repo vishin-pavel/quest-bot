@@ -32,27 +32,27 @@ class AnswerCommand extends Command
             $this->replyWithMessage(['text' => 'Увас нет активных игр']);
             exit;
         }
-        if (!$task   = $player->currentTask) {
+        if (!$task = $player->currentTask) {
             $this->replyWithMessage(['text' => 'Увас нет активных игр']);
             exit;
         }
         if ($task->pass_phrase == $arguments) {
             $this->replyWithMessage(['text' => 'Ответ принят']);
             $this->replyWithMessage(['text' => $task->final_text]);
-            if ( ! $task->next_task) {
+            if (!$task->next_task) {
                 $this->replyWithMessage(['text' => 'Game  over']);
                 $player->delete();
                 exit();
             }
             $player->current_task = $task->next_task;
             $player->save();
-            $nextTask             = Task::findOne($player->current_task);
+            $nextTask = Task::findOne($player->current_task);
             $this->replyWithMessage(['text' => 'Следующая задача: ']);
             $this->replyWithMessage(['text' => $nextTask->start_text]);
-            foreach ($nextTask->images as $image){
+            foreach ($nextTask->images as $image) {
                 $this->replyWithPhoto([
                     'chat_id' => $this->getUpdate()->getChat()->getId(),
-                    'photo' => 'http://telebot.backend.pro'.$image->path,
+                    'photo' => 'http://telebot.backend.pro' . $image->path,
                     'caption' => ' '
                 ]);
             }

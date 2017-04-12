@@ -15,8 +15,9 @@ use Yii;
  * @property Game $game
  * @property TelegramUser $telegramUser
  * @property Task $currentTask
+ * @property  integer $
  */
-class Player extends \yii\db\ActiveRecord
+class   Player extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
