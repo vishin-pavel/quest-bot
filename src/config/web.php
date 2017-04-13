@@ -9,7 +9,7 @@ $config = [
     'components' => [
         'bot' => [
             'class' => '\app\components\Telegram\Bot\Api',
-            'apiToken' => '333033824:AAEIZZwkaFssI-e-JRvtTcR6iICTW3u-yAI',
+            'apiToken' => '375985395:AAGipjTqhpqHRaapfTOSIpuiJgm7s_dvk6M',
         ],
         'request' => [
             'cookieValidationKey' => 'QnwCSoncop5kP5EhYNOR',
@@ -32,21 +32,21 @@ $config = [
             // for the mailer to send real emails.
             'useFileTransport' => true,
         ],
-//        'log' => [
-//            'traceLevel' => YII_DEBUG ? 3 : 0,
-//            'targets' => [
-//                [
-//                    'class' => 'yii\log\FileTarget',
-//                    'levels' => ['error', 'warning'],
-//                ],
-//            ],
-//        ],
+        'log' => [
+            'traceLevel' => YII_DEBUG ? 3 : 0,
+            'targets' => [
+                [
+                    'class' => 'yii\log\FileTarget',
+                    'levels' => ['error', 'warning'],
+                ],
+            ],
+        ],
         'db' => require(__DIR__ . '/db.php'),
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                'POST,GET bot/333033824:AAEIZZwkaFssI-e-JRvtTcR6iICTW3u-yAI/' => 'bot/index'
+                'POST,GET bot/<id:[\w\d:\-_]+>/' => 'bot/index'
             ],
         ],
     ],
@@ -66,7 +66,7 @@ if (YII_ENV_DEV) {
     $config['modules']['gii'] = [
         'class' => 'yii\gii\Module',
         // uncomment the following to add your IP if you are not connecting from localhost.
-        'allowedIPs' => ['*'],
+        'allowedIPs' => ['127.0.0.1', '::1'],
     ];
 }
 
