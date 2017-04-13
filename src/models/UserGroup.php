@@ -29,8 +29,8 @@ class UserGroup extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['telegram_user_id', 'group_id'], 'required'],
-            [['telegram_user_id', 'group_id'], 'integer'],
+            [['telegram_user_id', 'group_id', 'game_id'], 'required'],
+            [['telegram_user_id', 'group_id', 'game_id'], 'integer'],
             [['telegram_user_id'], 'exist', 'skipOnError' => true, 'targetClass' => TelegramUser::className(), 'targetAttribute' => ['telegram_user_id' => 'id']],
             [['group_id'], 'exist', 'skipOnError' => true, 'targetClass' => Group::className(), 'targetAttribute' => ['group_id' => 'id']],
         ];

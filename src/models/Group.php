@@ -78,9 +78,9 @@ class Group extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getTelegramUsers()
+    public function getPlayers()
     {
-        return $this->hasMany(TelegramUser::className(), ['id' => 'telegram_user_id'])->viaTable('user_group', ['group_id' => 'id']);
+        return $this->hasMany(Player::className(), ['telegram_user_id' => 'telegram_user_id', 'game_id' => 'game_id'])->via('userGroups');
     }
 
     /**
