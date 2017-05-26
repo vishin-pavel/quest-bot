@@ -22,7 +22,9 @@ use yii\db\Query;
  * @property string $latitude
  *
  * @property Game $game
- * @property File[]  $images
+ * @property File[] $images
+ * @property Hint[] $hints
+ *
  */
 class Task extends \yii\db\ActiveRecord
 {
@@ -102,4 +104,13 @@ class Task extends \yii\db\ActiveRecord
     {
         return $this->hasMany(File::className(), ['id'=>'image_id'])->via('taskImages');
     }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getHints()
+    {
+        return $this->hasMany(Hint::className(), ['task_id' => 'id']);
+    }
+
 }

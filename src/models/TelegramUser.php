@@ -53,7 +53,7 @@ class TelegramUser extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getPlayers()
+    public function  getPlayers()
     {
         return $this->hasMany(Player::className(), ['telegram_user_id' => 'id']);
     }

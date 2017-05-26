@@ -15,6 +15,7 @@ use Yii;
  * @property Player[] $players
  * @property TelegramUser[] $telegramUsers
  * @property Task[] $tasks
+ * @property AdditionalGame[] $additionalGame
  */
 class Game extends \yii\db\ActiveRecord
 {
@@ -46,6 +47,7 @@ class Game extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'name' => 'Name',
+            'first_task' => 'First task',
             'description' => 'Description',
         ];
     }
@@ -72,6 +74,14 @@ class Game extends \yii\db\ActiveRecord
     public function getTasks()
     {
         return $this->hasMany(Task::className(), ['game_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAdditionalGame()
+    {
+        return $this->hasMany(AdditionalGame::className(), ['game_id' => 'id']);
     }
 
     /**

@@ -11,14 +11,20 @@ use Yii;
  * @property integer $game_id
  * @property integer $game_status
  * @property integer $current_task
+ * @property integer $group_id
+ * @property integer $before_additional_game_task
  *
  * @property Game $game
  * @property TelegramUser $telegramUser
  * @property Task $currentTask
- * @property  integer $
+ * @property Task $lastTask
+ *
  */
 class   Player extends \yii\db\ActiveRecord
 {
+    const GAME_STATUS_MAIN_QUEST_DONE = 1;
+    const GAME_STATUS_ADDITIONAL_DONE = 2;
+
     /**
      * @inheritdoc
      */
@@ -34,7 +40,7 @@ class   Player extends \yii\db\ActiveRecord
     {
         return [
             [['telegram_user_id', 'game_id'], 'required'],
-            [['telegram_user_id', 'game_id', 'game_status', 'current_task'], 'integer'],
+            [['telegram_user_id', 'game_id', 'game_status', 'current_task', 'group_id', 'before_additional_game_task'], 'integer'],
             [['game_id'], 'exist', 'skipOnError' => true, 'targetClass' => Game::className(), 'targetAttribute' => ['game_id' => 'id']],
             [['telegram_user_id'], 'exist', 'skipOnError' => true, 'targetClass' => TelegramUser::className(), 'targetAttribute' => ['telegram_user_id' => 'id']],
         ];
@@ -50,6 +56,8 @@ class   Player extends \yii\db\ActiveRecord
             'game_id' => 'Game ID',
             'game_status' => 'Game Status',
             'current_task' => 'Current Task',
+            'group_id' => 'Group ID',
+            'before_additional_game_task' => 'Last task'
         ];
     }
 
@@ -81,5 +89,15 @@ class   Player extends \yii\db\ActiveRecord
     public function getCurrentTask()
     {
         return $this->hasOne(Task::className(), ['id' => 'current_task']);
+    }
+
+    public function getGroup()
+    {
+        return $this->hasOne(Group::className(), ['id' => 'group_id']);
+    }
+
+    public function lastTask()
+    {
+        return $this->hasOne(Task::className(), ['id' => 'before_additional_game_task']);
     }
 }

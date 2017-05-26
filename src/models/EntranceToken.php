@@ -35,7 +35,7 @@ class EntranceToken extends \yii\db\ActiveRecord
             [['token'], 'default', 'value'=>function(){return \Yii::$app->security->generateRandomString(32);}],
             [['token'], 'string', 'max' => 32],
             [['group_id'], 'exist', 'skipOnError' => true, 'targetClass' => Group::className(), 'targetAttribute' => ['group_id' => 'id']],
-            [['game_id'], 'exist', 'skipOnError' => true, 'targetClass' => Group::className(), 'targetAttribute' => ['game_id' => 'id']],
+//            [['game_id'], 'exist', 'skipOnError' => true, 'targetClass' => Group::className(), 'targetAttribute' => ['game_id' => 'id']],
         ];
     }
 

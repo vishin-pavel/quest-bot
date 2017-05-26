@@ -28,6 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'game_id',
             'game_status',
             'current_task',
+            'before_additional_game_task',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

@@ -23,15 +23,16 @@ class HelpCommand extends Command
      */
     public function handle($arguments)
     {
-        $this->replyWithMessage(['text' => 'Привет и добро поаловать. Вот список доступных команд: ']);
+        $this->replyWithMessage(['text' => 'Добро пожаловать в квест "Совесть должна быть у каждого". Чтобы начать квест, введите код своей команды.']);
+        $this->replyWithMessage(['text' => 'Вот команды, которые могут понадобиться Вам в ходе квеста.']);
         $this->replyWithChatAction(['action' => Actions::TYPING]);
         $commands = $this->getTelegram()->getCommands();
         $response = '';
         foreach ($commands as $name => $command) {
-            $response .= sprintf('/%s - %s' . PHP_EOL, $name, $command->getDescription());
+            if($name != 'answer'){
+                $response .= sprintf('/%s - %s' . PHP_EOL, $name, $command->getDescription());
+            }
         }
         $this->replyWithMessage(['text' => $response]);
-        $this->replyWithChatAction(['action' => Actions::TYPING]);
-        $this->replyWithMessage(['text' => '!Простой ответ(не команда) в данный чат считается ответом на текущее задание']);
     }
 }

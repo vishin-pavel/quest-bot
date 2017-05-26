@@ -16,6 +16,7 @@ use Yii;
  * @property Game $game
  * @property UserGroup[] $userGroups
  * @property TelegramUser[] $telegramUsers
+ * @property Player[] $players
  */
 class Group extends \yii\db\ActiveRecord
 {
@@ -67,20 +68,20 @@ class Group extends \yii\db\ActiveRecord
         return $this->hasOne(Game::className(), ['id' => 'game_id']);
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getUserGroups()
-    {
-        return $this->hasMany(UserGroup::className(), ['group_id' => 'id']);
-    }
+//    /**
+//     * @return \yii\db\ActiveQuery
+//     */
+//    public function getUserGroups()
+//    {
+//        return $this->hasMany(UserGroup::className(), ['group_id' => 'id']);
+//    }
 
     /**
      * @return \yii\db\ActiveQuery
      */
     public function getPlayers()
     {
-        return $this->hasMany(Player::className(), ['telegram_user_id' => 'telegram_user_id', 'game_id' => 'game_id'])->via('userGroups');
+        return $this->hasMany(Player::className(), ['group_id'=>'id']);
     }
 
     /**
